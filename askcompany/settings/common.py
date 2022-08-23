@@ -13,6 +13,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 import os
 from os.path import abspath, dirname
 
+import collections
+if not hasattr(collections, 'Callable'):
+    collections.Callable = collections.abc.Callable
+
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = dirname(dirname(dirname(abspath(__file__))))
@@ -29,6 +33,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+ADMINS = [
+    ('white', 'wlsdka12@gmail.com'),
+]
 
 # Application definition
 
@@ -37,14 +44,20 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
+    'django.contrib.humanize',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
     # Third Apps
+    'bootstrap4',
     'debug_toolbar',
-
+    'django_pydenticon',
+    'easy_thumbnails',
+    
     # Locals Apps
+    'accounts',
+    'instagram',
 ]
 
 MIDDLEWARE = [
@@ -92,6 +105,8 @@ DATABASES = {
 }
 
 
+AUTH_USER_MODEL = "accounts.User"
+
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
 
@@ -129,13 +144,23 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_DIRS = [
+STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'askcompany', 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 INTERNAL_IPS = ['127.0.0.1']
+
+
+
+SENDGRID_API_KEY = os.environ.get('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+WELCOME_EMAIL_SENDER = 'wlsdka12@gmail.com'
